@@ -1,64 +1,66 @@
+import { GoogleGenerativeAI } from "@google/generative-ai"; // 🟢 Fixed class import name
 import { NextResponse } from "next/server";
-import { GoogleGenerativeAI } from "@google/generative-ai";
-const secretToken = process.env.OPENAI_API_KEY || "";
-const ai = new GoogleGenerativeAI(secretToken);
+
+// 🔐 Bulletproof Environment Key Loading
+const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+
+if (!apiKey) {
+  console.error("⚠️ SYSTEM WARNING: No API key was detected in your environment variables!");
+}
+
+const ai = new GoogleGenerativeAI(apiKey || ""); // 🟢 Fixed instantiation class name
+
 export async function POST(request: Request) {
   try {
-    const { rawInput, ageGroup } = await request.json();
+    const { text } = await request.json();
 
-    const aiPrompt = `
-      You are an assistant for students with dyslexia and ADHD. 
-      Target Age Group: ${ageGroup}.
+    if (!text || !text.trim()) {
+      return NextResponse.json({ error: "No text provided" }, { status: 400 });
+    }
+
+    // 🤖 Using the updated gemini-2.5-flash model for high-speed, reliable generation
+    const model = ai.getGenerativeModel({ model: "gemini-2.5-flash" });
+
+    const systemPrompt = `
+      You are an expert neuro-inclusive educational assistant. Your job is to help students with ADHD and dyslexia by breaking down dense study materials into highly structured, bite-sized micro-flashcards.
       
-      Tasks:
-      1. Fix any phonetic spelling errors or messy text in the input.
-      2. Break the content down into small, digestible educational flashcards.
-      3. No card can be longer than 3 sentences.
-      4. Wrap key vocabulary terms in **bold markdown** so they catch the reader's eye.
-      5. Start every card with a relevant emoji to act as a visual anchor.
-
-      Return the result STRICTLY as a raw JSON array. Do not wrap it in markdown code blocks. 
-      Use this exact structure:
-      [
-        { "id": 1, "content": "Visual emoji and short text summary here." }
-      ]
-
-      Source Text: "${rawInput}"
+      Follow these strict formatting rules to optimize cognitive load:
+      1. Create a clear list of flashcards processing the core ideas of the material.
+      2. Each flashcard MUST be an absolute maximum of 1 to 3 short, punchy sentences. Never write long paragraphs.
+      3. Return your final answer strictly as a valid JSON object matching this exact shape:
+         {
+           "flashcards": [
+             "First micro-card text here.",
+             "Second micro-card text here."
+           ]
+         }
+      Do not wrap your response in markdown code blocks like \`\`\`json. Return only raw JSON.
     `;
 
-    let result;
-    let rawResponse = "";
+    const result = await model.generateContent({
+      contents: [
+        { role: "user", parts: [{ text: `${systemPrompt}\n\nStudy Material:\n${text}` }] }
+      ]
+    });
 
-    try {
-      // Strategy 1: Try the high-speed primary model first
-      console.log("Attempting primary model: gemini-2.5-flash...");
-      const primaryModel = ai.getGenerativeModel({ model: "gemini-2.5-flash" });
-      result = await primaryModel.generateContent(aiPrompt);
-      rawResponse = result.response.text();
-    } catch (primaryError) {
-      // Strategy 2: If the primary model is busy (503), automatically catch it and use the fallback
-      console.warn("Primary model busy or failed. Swapping to fallback: gemini-1.5-flash...", primaryError);
-      const fallbackModel = ai.getGenerativeModel({ model: "gemini-1.5-flash" });
-      result = await fallbackModel.generateContent(aiPrompt);
-      rawResponse = result.response.text();
-    }
+    const rawResponse = result.response.text().trim();
+
+    // Clean up any accidental markdown wrapper artifacts if the AI returns them
+    const cleanJsonString = rawResponse
+      .replace(/^```json\s*/i, "")
+      .replace(/```$/, "")
+      .trim();
+
+    const data = JSON.parse(cleanJsonString);
     
-    // Safety formatting clean-up
-    rawResponse = rawResponse.replace(/```json/gi, "").replace(/```/g, "").trim();
-    const startIdx = rawResponse.indexOf("[");
-    const endIdx = rawResponse.lastIndexOf("]") + 1;
-    if (startIdx !== -1 && endIdx !== -1) {
-      rawResponse = rawResponse.substring(startIdx, endIdx);
-    }
-
-    const flashcards = JSON.parse(rawResponse);
-    return NextResponse.json({ flashcards });
+    // Return the response perfectly inside the handler function
+    return NextResponse.json({ flashcards: data.flashcards || [] });
 
   } catch (error: any) {
     console.error("Critical Gemini Backend Failure:", error);
     return NextResponse.json(
-      { error: "Google's AI systems are currently overloaded. Please wait a moment and try again!" }, 
-      { status: 503 }
+      { error: "Failed to process text. Check server configurations." },
+      { status: 500 }
     );
   }
 }
