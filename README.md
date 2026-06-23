@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Neuro-Inclusive AI Assistant 🚀
 
-## Getting Started
+An accessible, AI-powered assistive learning platform engineered to transform dense textbook text, lectures, or vocal inputs into highly structured micro-flashcards. 
 
-First, run the development server:
+This application is specifically designed to optimize cognitive load, visual scannability, and processing workflows for students with dyslexia and ADHD.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 📋 Project Overview
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Traditional educational materials present information in heavy, intimidating blocks of text, causing rapid reading fatigue and focus drift for neurodivergent learners. This assistant leverages Generative AI to completely restructure educational content. 
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+By enforcing strict constraints on content length, utilizing vibrant high-contrast visual anchors, and offering native bi-directional speech utilities, the platform helps users process and retain information effortlessly without experiencing cognitive overwhelm.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## ✨ Active Features (Fully Operational)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+* **🎙️ Speech-to-Text Voice Dictation:** Integrates native browser speech recognition, allowing students facing typing difficulties or dysgraphia to verbally dictate textbook material straight into the input matrix via the **"Dictate Notes (Speak)"** engine.
+  
+* **🔊 Text-to-Speech Auditory Readout:** Every generated flashcard includes an interactive **"Read Aloud"** controller that reads content back to the student at a calibrated, comfortable cadence ($0.85\times$ speed) to maximize listening comprehension.
+  
+* **🧠 Smart Micro-Flashcards:** Enforces an absolute upper limit of **3 sentences maximum per card** to mitigate attention drift and ensure key educational concepts are processed in high-retention windows.
+  
+* **🎨 High-Contrast Vibrant Theme:** Features a centered, extra-bold typography layout using deep indigo (`#0f172a`), electric blue, and crisp emerald green design anchors to eliminate "visual crowding" and maximize scannability.
+  
+* **🛡️ Secure Token Failover:** Decouples structural API credentials completely utilizing local server runtime configurations (`.env.local`) to prevent hardcoded key leakage onto public networks.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🛠️ Technologies Used
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+* **Frontend Framework:** Next.js 16.2+ (App Router architecture driven by Turbopack)
+  
+* **Programming Language:** TypeScript (Strict type system safety)
+  
+* **Styling Engine:** Tailwind CSS
+  
+* **Artificial Intelligence Core:** Google Gemini SDK (`@google/generative-ai`)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 📂 Folder Structure
+
+```text
+neuro-assistant/
+├── app/
+│   ├── api/
+│   │   └── process-lesson/
+│   │       └── route.ts       # Secure backend API route with fallback model architecture
+│   ├── layout.tsx             # Global application wrapper and typography presets
+│   └── page.tsx               # Main interactive dashboard with speech utilities & theme layout
+├── public/                    # Assets, icons, and static illustrations
+├── .env.local                 # Local secret environment file (GIT IGNORED)
+├── .gitignore                 # Exclusion configuration for Git version control
+├── next.config.ts             # Next.js compiler settings
+├── package.json               # JavaScript dependency manifest
+└── tsconfig.json              # TypeScript compilation rules
+
+
+👩‍💻 Author
+
+Siri Mudaddla
+
+⭐ Support
+
+If you found this project helpful, consider giving it a ⭐ on GitHub!
