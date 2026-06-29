@@ -1,14 +1,14 @@
-import { GoogleGenerativeAI } from "@google/generative-ai"; // 🟢 Fixed class import name
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
 
-// 🔐 Bulletproof Environment Key Loading
-const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+// 🔐 Strict Server-Side Key Loading (Completely hidden from browser inspection)
+const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
 
 if (!apiKey) {
-  console.error("⚠️ SYSTEM WARNING: No API key was detected in your environment variables!");
+  console.error("⚠️ SYSTEM WARNING: No secure server-side API key detected!");
 }
 
-const ai = new GoogleGenerativeAI(apiKey || ""); // 🟢 Fixed instantiation class name
+const ai = new GoogleGenerativeAI(apiKey || "");
 
 export async function POST(request: Request) {
   try {
@@ -18,7 +18,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "No text provided" }, { status: 400 });
     }
 
-    // 🤖 Using the updated gemini-2.5-flash model for high-speed, reliable generation
+    // 🤖 Using the gemini-2.5-flash model for high-speed, reliable generation
     const model = ai.getGenerativeModel({ model: "gemini-2.5-flash" });
 
     const systemPrompt = `
@@ -53,7 +53,6 @@ export async function POST(request: Request) {
 
     const data = JSON.parse(cleanJsonString);
     
-    // Return the response perfectly inside the handler function
     return NextResponse.json({ flashcards: data.flashcards || [] });
 
   } catch (error: any) {

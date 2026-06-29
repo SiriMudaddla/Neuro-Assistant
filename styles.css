@@ -1,0 +1,12 @@
+.generate-btn{
+  width:100%;
+  padding:32px 20px;
+  border:none;
+  border-radius:999px;
+  background-color:#301934;
+  color:#f7e9fb;
+  font-size:1.7rem;
+  font-weight:800;
+  letter-spacing:.6px;
+  cursor:pointer;
+}
