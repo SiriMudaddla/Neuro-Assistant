@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Neuro-Inclusive AI Assistant</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="page-shell">
+    <header class="topbar">
+      <button class="theme-toggle" id="themeToggle" type="button">🌙 DARK MODE</button>
+    </header>
+
+    <main class="app-wrap">
+      <h1 class="hero-title">NEURO-INCLUSIVE AI ASSISTANT</h1>
+
+      <section class="notes-card">
+        <div class="notes-header">
+          <div>
+            <h2>Study Material / Notes</h2>
+            <p>Input your source material below</p>
+          </div>
+          <button class="dictate-btn" type="button">🎤 Dictate Notes</button>
+        </div>
+
+        <div class="notes-body">
+          <textarea id="notesInput" placeholder="Paste complex topics, messy lecture notes, or textbook sections here..."></textarea>
+          <div class="notes-meta">
+            <span id="charCount">Character count: 0</span>
+            <span>Formatting: Plain Text</span>
+          </div>
+          <div class="actions">
+            <button class="action-btn" id="summaryBtn" type="button">Generate Summary</button>
+            <button class="action-btn" id="flashcardBtn" type="button">Generate Flashcards</button>
+            <button class="action-btn" id="focusBtn" type="button">Start Focus Session</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="results-grid">
+        <article class="result-panel">
+          <h3>Summary</h3>
+          <div id="summaryBox" class="result-box">Your summary will appear here.</div>
+        </article>
+        <article class="result-panel">
+          <h3>Flashcards</h3>
+          <div id="flashcardBox" class="cards"></div>
+        </article>
+      </section>
+    </main>
+  </div>
+  <script src="app.js" defer></script>
+</body>
+</html>
