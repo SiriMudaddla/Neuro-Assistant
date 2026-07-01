@@ -1,6 +1,8 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
 
+export const dynamic = 'force-static'; // Prevents static export compilation build blocks
+
 // 🔐 Strict Server-Side Key Loading (Completely hidden from browser inspection)
 const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
 
