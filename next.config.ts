@@ -1,9 +1,8 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  output: 'export', // 🌟 CRUCIAL: Generates the flat static "out" directory for mobile packaging
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  output: 'export', // Forces Next.js to build a standalone static "out" folder
   images: {
-    unoptimized: true, // Required for static web view exports
+    unoptimized: true, // Required because mobile apps load local images, not from a web server
   },
 };
 
